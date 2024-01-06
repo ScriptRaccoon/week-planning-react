@@ -1,0 +1,18 @@
+.form {
+	margin-block: 2rem;
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 0.5rem;
+}
+
+.form:focus-within .label {
+	color: var(--font-color);
+}
+
+.input_label {
+	grid-column: 1 / span 2;
+}
+
+.name_input {
+	width: 100%;
+}

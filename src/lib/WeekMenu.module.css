@@ -1,0 +1,29 @@
+.menu {
+	display: grid;
+	justify-items: center;
+	grid-template-columns: 1fr 1fr;
+	row-gap: 0.5rem;
+}
+
+.title {
+	font-weight: 400;
+	grid-column: 1 / span 2;
+	text-align: center;
+	font-size: 1.5rem;
+}
+
+@media (min-width: 34rem) {
+	.menu {
+		width: fit-content;
+		margin-inline: auto;
+		grid-template-columns: auto 1fr auto;
+		grid-auto-flow: dense;
+		align-items: center;
+		column-gap: 1.5rem;
+	}
+
+	.title {
+		grid-column: 2 / span 1;
+		font-size: 1.75rem;
+	}
+}
