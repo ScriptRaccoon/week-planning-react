@@ -15,6 +15,8 @@ import AddPlan from "./lib/AddPlan"
 import Plans from "./lib/Plans"
 
 function App() {
+	// state
+
 	const now = new Date()
 	const [week_start, set_week_start] = useState<Date>(get_week_start(now))
 	const [week_end, set_week_end] = useState<Date>(get_week_end(week_start))
@@ -41,13 +43,49 @@ function App() {
 		set_current_plans(plans[key(week_start)] ?? [])
 	}, [week_start, plans])
 
-	function increment_week() {
+	// week navigation
+
+	function increment_week(): void {
 		set_week_start(add_one_week(week_start))
 	}
 
-	function decrement_week() {
+	function decrement_week(): void {
 		set_week_start(remove_one_week(week_start))
 	}
+
+	// helper functions
+
+	function cancel_edit(): void {
+		set_editing_id(null)
+	}
+
+	function update_plans(week_key: string, updated_plans: PlanData[]): void {
+		set_plans((plans) => ({ ...plans, [week_key]: updated_plans }))
+	}
+
+	function update_plan(
+		week_key: string,
+		transform: (plan: PlanData) => Partial<PlanData>
+	): void {
+		const updated_plans = (plans[week_key] ?? []).map((plan) =>
+			plan.id === editing_id ? { ...plan, ...transform(plan) } : plan
+		)
+		update_plans(week_key, updated_plans)
+	}
+
+	function add_plan(week_key: string, new_plan: PlanData): void {
+		update_plans(week_key, [...(plans[week_key] ?? []), new_plan])
+	}
+
+	function delete_plan(week_key: string): void {
+		const updated_plans = (plans[week_key] ?? []).filter(
+			(plan) => plan.id !== editing_id
+		)
+		update_plans(week_key, updated_plans)
+		cancel_edit()
+	}
+
+	// main functions
 
 	function create_plan(name: string) {
 		if (!name) return
@@ -56,42 +94,16 @@ function App() {
 			name,
 			done: false,
 		}
-		set_plans((plans) => {
-			const existing_plans = plans[key(week_start)] ?? []
-			const updated_plans = [...existing_plans, plan]
-			return { ...plans, [key(week_start)]: updated_plans }
-		})
+		add_plan(key(week_start), plan)
 	}
 
 	function rename_plan(name: string): void {
 		if (!name) return
-		const existing_plans = plans[key(week_start)] ?? []
-		const updated_plans = existing_plans.map((plan) => {
-			if (plan.id === editing_id) {
-				return { ...plan, name }
-			}
-			return plan
-		})
-		set_plans((plans) => {
-			return { ...plans, [key(week_start)]: updated_plans }
-		})
-	}
-
-	function cancel_edit(): void {
-		set_editing_id(null)
+		update_plan(key(week_start), () => ({ name }))
 	}
 
 	function toggle_done(): void {
-		const existing_plans = plans[key(week_start)] ?? []
-		const updated_plans = existing_plans.map((plan) => {
-			if (plan.id === editing_id) {
-				return { ...plan, done: !plan.done }
-			}
-			return plan
-		})
-		set_plans((plans) => {
-			return { ...plans, [key(week_start)]: updated_plans }
-		})
+		update_plan(key(week_start), (plan) => ({ done: !plan.done }))
 		cancel_edit()
 	}
 
@@ -99,33 +111,11 @@ function App() {
 		if (!editing_id) return
 		const plan = current_plans.find((p) => p.id === editing_id)
 		if (!plan) return
-
-		const existing_plans = plans[key(week_start)] ?? []
-		const updated_plans = existing_plans.filter((p) => p.id != editing_id)
-		set_plans((plans) => {
-			return { ...plans, [key(week_start)]: updated_plans }
-		})
-
+		delete_plan(key(week_start))
 		const action = offset === 1 ? add_one_week : remove_one_week
 		const new_date = action(week_start)
-
-		const other_plans = plans[key(new_date)] ?? []
-		const new_plans = [...other_plans, plan]
-		set_plans((plans) => {
-			return { ...plans, [key(new_date)]: new_plans }
-		})
-
+		add_plan(key(new_date), plan)
 		cancel_edit()
-	}
-
-	function delete_plan(): void {
-		set_plans((previous_plans) => {
-			const copy = { ...previous_plans }
-			copy[key(week_start)] = copy[key(week_start)].filter(
-				(plan) => plan.id !== editing_id
-			)
-			return copy
-		})
 	}
 
 	return (
@@ -147,7 +137,7 @@ function App() {
 					toggle_done={toggle_done}
 					move_to_next_week={() => move(1)}
 					move_to_previous_week={() => move(-1)}
-					delete_plan={delete_plan}
+					delete_plan={() => delete_plan(key(week_start))}
 				/>
 			</main>
 		</>
