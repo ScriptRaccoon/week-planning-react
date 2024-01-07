@@ -29,7 +29,12 @@ export default function Plan(props: Props) {
 		delete_plan,
 	} = props
 	const [show_edit_container, set_show_edit_container] = useState(false)
+	const [visible, set_visible] = useState(false)
 	const [name, set_name] = useState<string>(plan.name)
+
+	useEffect(() => {
+		set_show_edit_container(editing_id === plan.id)
+	}, [editing_id, plan.id])
 
 	function try_rename_plan() {
 		if (!name) {
@@ -39,12 +44,18 @@ export default function Plan(props: Props) {
 		rename(name)
 	}
 
-	useEffect(() => {
-		set_show_edit_container(editing_id === plan.id)
-	}, [editing_id, plan.id])
-
 	function toggle_edit() {
-		set_editing_id(show_edit_container ? null : plan.id)
+		if (show_edit_container) {
+			set_visible(false)
+			setTimeout(() => {
+				set_editing_id(null)
+			}, 120)
+			return
+		}
+		set_editing_id(plan.id)
+		setTimeout(() => {
+			set_visible(true)
+		}, 10)
 	}
 
 	return (
@@ -73,6 +84,7 @@ export default function Plan(props: Props) {
 						type='text'
 						className={styles.name}
 						onBlur={try_rename_plan}
+						aria-hidden={!show_edit_container}
 						autoFocus
 						value={name}
 						onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -88,8 +100,10 @@ export default function Plan(props: Props) {
 
 			{show_edit_container && (
 				<div
-					className={styles.edit_container}
-					// transition:fly={{ duration: 120, x: 20 }}
+					className={classnames({
+						[styles.edit_container]: true,
+						[styles.visible]: visible,
+					})}
 				>
 					<button
 						aria-label='toggle done'

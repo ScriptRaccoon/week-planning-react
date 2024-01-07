@@ -57,4 +57,14 @@
 	display: flex;
 	flex-direction: row-reverse;
 	gap: 0.5rem;
+	opacity: 0;
+	transform: translateX(1.5rem);
+	transition: opacity 120ms ease, transform 120ms ease;
+	pointer-events: none;
+}
+
+.edit_container.visible {
+	pointer-events: initial;
+	opacity: 1;
+	transform: translateX(0);
 }
