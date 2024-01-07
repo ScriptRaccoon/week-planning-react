@@ -21,7 +21,7 @@ export default function Plan(props: Props) {
 	const {
 		plan,
 		editing_id,
-		rename_plan: rename,
+		rename_plan,
 		set_editing_id,
 		toggle_done,
 		move_to_next_week,
@@ -41,7 +41,7 @@ export default function Plan(props: Props) {
 			set_name(plan.name)
 			return
 		}
-		rename(name)
+		rename_plan(name)
 	}
 
 	function toggle_edit() {
