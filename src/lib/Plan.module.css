@@ -24,6 +24,7 @@
 
 .name {
 	flex: 1;
+	width: 0;
 	font-size: 1.25rem;
 	line-height: inherit;
 	border-radius: 0.1rem;
@@ -39,10 +40,8 @@
 	opacity: 0.15;
 }
 
-.button__done {
-	/* does not WORK yet */
+.edit_container > .button_done {
 	background-color: var(--secondary-color);
-	outline: 2px solid yellow;
 }
 
 .edit_container {
