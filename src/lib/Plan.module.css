@@ -41,7 +41,7 @@
 }
 
 .edit_container > .button_done {
-	background-color: var(--secondary-color);
+	background-color: var(--secondary-color) !important;
 }
 
 .edit_container {
