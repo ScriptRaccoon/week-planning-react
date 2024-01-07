@@ -85,7 +85,6 @@ export default function Plan(props: Props) {
 						className={styles.name}
 						onBlur={try_rename_plan}
 						aria-hidden={!show_edit_container}
-						autoFocus
 						value={name}
 						onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
 							set_name(e.target.value)
