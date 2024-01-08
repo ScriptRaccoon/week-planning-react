@@ -1,4 +1,4 @@
-import type { PlanData, PlanProps } from "../types"
+import type { PlanData, PlanProps } from "../shared/types"
 import Plan from "./Plan"
 
 import styles from "./Plans.module.css"

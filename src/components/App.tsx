@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react"
 
-import { PlanData } from "./types"
+import { PlanData } from "../shared/types"
 import {
 	add_one_week,
 	get_week_end,
 	get_week_start,
 	key,
 	remove_one_week,
-} from "./utils"
+} from "../shared/utils"
 
-import Header from "./lib/Header"
-import WeekMenu from "./lib/WeekMenu"
-import AddPlan from "./lib/AddPlan"
-import Plans from "./lib/Plans"
+import Header from "./Header"
+import WeekMenu from "./WeekMenu"
+import AddPlan from "./AddPlan"
+import Plans from "./Plans"
 
 function App() {
 	// state
