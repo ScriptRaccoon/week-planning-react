@@ -19,10 +19,13 @@ function App() {
 
 	const now = new Date()
 	const [week_start, set_week_start] = useState<Date>(get_week_start(now))
-	const [week_end, set_week_end] = useState<Date>(get_week_end(week_start))
 	const [plans, set_plans] = useState<Record<string, PlanData[]>>({})
-	const [current_plans, set_current_plans] = useState<PlanData[]>([])
 	const [editing_id, set_editing_id] = useState<string | null>(null)
+
+	const week_end = get_week_end(week_start)
+	const current_plans = plans[key(week_start)] ?? []
+
+	// effect hooks
 
 	useEffect(() => {
 		window.addEventListener("keydown", handle_keydown)
@@ -34,14 +37,6 @@ function App() {
 			window.removeEventListener("keydown", handle_keydown)
 		}
 	}, [])
-
-	useEffect(() => {
-		set_week_end(get_week_end(week_start))
-	}, [week_start])
-
-	useEffect(() => {
-		set_current_plans(plans[key(week_start)] ?? [])
-	}, [week_start, plans])
 
 	// week navigation
 

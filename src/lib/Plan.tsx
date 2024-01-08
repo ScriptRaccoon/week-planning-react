@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { PlanData, PlanProps } from "../types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -28,13 +28,10 @@ export default function Plan(props: Props) {
 		move_to_previous_week,
 		delete_plan,
 	} = props
-	const [show_edit_container, set_show_edit_container] = useState(false)
 	const [visible, set_visible] = useState(false)
 	const [name, set_name] = useState<string>(plan.name)
 
-	useEffect(() => {
-		set_show_edit_container(editing_id === plan.id)
-	}, [editing_id, plan.id])
+	const show_edit_container = editing_id === plan.id
 
 	function try_rename_plan() {
 		if (!name) {
