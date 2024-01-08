@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Plan_Data, Plan_Props } from "../shared/types"
+import { Plan_Data, Plan_Props } from "@/shared/types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
 	faBars,
