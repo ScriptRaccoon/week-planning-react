@@ -29,17 +29,8 @@ export default function Plan(props: Props) {
 		delete_plan,
 	} = props
 	const [visible, set_visible] = useState(false)
-	const [name, set_name] = useState<string>(plan.name)
 
 	const show_edit_container = editing_id === plan.id
-
-	function try_rename_plan() {
-		if (!name) {
-			set_name(plan.name)
-			return
-		}
-		rename_plan(name)
-	}
 
 	function toggle_edit() {
 		if (show_edit_container) {
@@ -80,11 +71,10 @@ export default function Plan(props: Props) {
 						aria-label='name'
 						type='text'
 						className={styles.name}
-						onBlur={try_rename_plan}
 						aria-hidden={!show_edit_container}
-						value={name}
-						onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
-							set_name(e.target.value)
+						value={plan.name}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+							rename_plan(e.target.value)
 						}
 					/>
 				) : (
