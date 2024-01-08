@@ -8,6 +8,7 @@ import {
 	key,
 	remove_one_week,
 } from "@/shared/utils"
+import { useLocalStorage } from "@/shared/hooks"
 
 import Header from "@/components/Header"
 import WeekMenu from "@/components/WeekMenu"
@@ -19,8 +20,11 @@ function App() {
 
 	const now = new Date()
 	const [week_start, set_week_start] = useState<Date>(get_week_start(now))
-	const [plans, set_plans] = useState<Record<string, Plan_Data[]>>({})
 	const [editing_id, set_editing_id] = useState<string | null>(null)
+	const [plans, set_plans] = useLocalStorage<Record<string, Plan_Data[]>>(
+		"plans_react",
+		{}
+	)
 
 	const week_end = get_week_end(week_start)
 	const current_plans = plans[key(week_start)] ?? []
