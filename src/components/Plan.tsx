@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { PlanData, PlanProps } from "../shared/types"
+import { Plan_Data, Plan_Props } from "../shared/types"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
 	faBars,
@@ -14,8 +14,8 @@ import classnames from "classnames"
 import styles from "./Plan.module.css"
 
 type Props = {
-	plan: PlanData
-} & PlanProps
+	plan: Plan_Data
+} & Plan_Props
 
 export default function Plan(props: Props) {
 	const {

@@ -1,11 +1,11 @@
-import type { PlanData, PlanProps } from "../shared/types"
+import type { Plan_Data, Plan_Props } from "../shared/types"
 import Plan from "./Plan"
 
 import styles from "./Plans.module.css"
 
 type Props = {
-	current_plans: PlanData[]
-} & PlanProps
+	current_plans: Plan_Data[]
+} & Plan_Props
 
 export default function Plans(props: Props) {
 	const { current_plans } = props

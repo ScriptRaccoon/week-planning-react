@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { PlanData } from "../shared/types"
+import { Plan_Data } from "../shared/types"
 import {
 	add_one_week,
 	get_week_end,
@@ -19,7 +19,7 @@ function App() {
 
 	const now = new Date()
 	const [week_start, set_week_start] = useState<Date>(get_week_start(now))
-	const [plans, set_plans] = useState<Record<string, PlanData[]>>({})
+	const [plans, set_plans] = useState<Record<string, Plan_Data[]>>({})
 	const [editing_id, set_editing_id] = useState<string | null>(null)
 
 	const week_end = get_week_end(week_start)
@@ -54,13 +54,13 @@ function App() {
 		set_editing_id(null)
 	}
 
-	function update_plans(week_key: string, updated_plans: PlanData[]): void {
+	function update_plans(week_key: string, updated_plans: Plan_Data[]): void {
 		set_plans((plans) => ({ ...plans, [week_key]: updated_plans }))
 	}
 
 	function update_plan(
 		week_key: string,
-		transform: (plan: PlanData) => Partial<PlanData>
+		transform: (plan: Plan_Data) => Partial<Plan_Data>
 	): void {
 		const updated_plans = (plans[week_key] ?? []).map((plan) =>
 			plan.id === editing_id ? { ...plan, ...transform(plan) } : plan
@@ -68,7 +68,7 @@ function App() {
 		update_plans(week_key, updated_plans)
 	}
 
-	function add_plan(week_key: string, new_plan: PlanData): void {
+	function add_plan(week_key: string, new_plan: Plan_Data): void {
 		update_plans(week_key, [...(plans[week_key] ?? []), new_plan])
 	}
 
@@ -84,7 +84,7 @@ function App() {
 
 	function create_plan(name: string) {
 		if (!name) return
-		const plan: PlanData = {
+		const plan: Plan_Data = {
 			id: crypto.randomUUID(),
 			name,
 			done: false,

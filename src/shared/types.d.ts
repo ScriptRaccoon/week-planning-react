@@ -1,10 +1,10 @@
-export type PlanData = {
+export type Plan_Data = {
 	id: string
 	name: string
 	done: boolean
 }
 
-export type PlanProps = {
+export type Plan_Props = {
 	editing_id: string | null
 	rename_plan: (name: string) => void
 	set_editing_id: (id: string | null) => void
