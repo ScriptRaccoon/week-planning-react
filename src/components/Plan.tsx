@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useRef } from "react"
 import { Plan_Data, Plan_Props } from "@/shared/types"
+import { CSSTransition } from "react-transition-group"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
 	faBars,
@@ -28,22 +29,17 @@ export default function Plan(props: Props) {
 		move_to_previous_week,
 		delete_plan,
 	} = props
-	const [visible, set_visible] = useState(false)
+
+	const edit_container_ref = useRef(null)
 
 	const show_edit_container = editing_id === plan.id
 
 	function toggle_edit() {
 		if (show_edit_container) {
-			set_visible(false)
-			setTimeout(() => {
-				set_editing_id(null)
-			}, 120)
-			return
+			set_editing_id(null)
+		} else {
+			set_editing_id(plan.id)
 		}
-		set_editing_id(plan.id)
-		setTimeout(() => {
-			set_visible(true)
-		}, 10)
 	}
 
 	return (
@@ -84,13 +80,19 @@ export default function Plan(props: Props) {
 				)}
 			</div>
 
-			{show_edit_container && (
-				<div
-					className={classnames({
-						[styles.edit_container]: true,
-						[styles.visible]: visible,
-					})}
-				>
+			<CSSTransition
+				in={show_edit_container}
+				nodeRef={edit_container_ref}
+				classNames={{
+					enter: styles.edit_container_enter,
+					enterActive: styles.edit_container_enter_active,
+					exit: styles.edit_container_exit,
+					exitActive: styles.edit_container_exit_active,
+				}}
+				timeout={120}
+				unmountOnExit
+			>
+				<div className={styles.edit_container} ref={edit_container_ref}>
 					<button
 						aria-label='toggle done'
 						className={classnames({
@@ -128,7 +130,7 @@ export default function Plan(props: Props) {
 						<FontAwesomeIcon icon={faTrashAlt} />
 					</button>
 				</div>
-			)}
+			</CSSTransition>
 		</div>
 	)
 }
