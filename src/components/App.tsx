@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { Plan_Data } from "@/shared/types"
 import {
@@ -29,18 +29,28 @@ function App() {
 	const week_end = get_week_end(week_start)
 	const current_plans = plans[key(week_start)] ?? []
 
+	const plans_ref = useRef<HTMLDivElement>(null)
+
 	// effect hooks
 
 	useEffect(() => {
 		window.addEventListener("keydown", handle_keydown)
+		document.addEventListener("click", handle_click)
 
 		function handle_keydown(e: KeyboardEvent) {
 			if (e.key === "Escape") cancel_edit()
 		}
+
+		function handle_click(e: MouseEvent) {
+			const is_outside = !plans_ref.current?.contains(e.target as Node)
+			if (editing_id && is_outside) cancel_edit()
+		}
+
 		return () => {
 			window.removeEventListener("keydown", handle_keydown)
+			document.removeEventListener("click", handle_click)
 		}
-	}, [])
+	}, [editing_id])
 
 	// week navigation
 
@@ -130,6 +140,7 @@ function App() {
 				<AddPlan add={create_plan} />
 				<Plans
 					current_plans={current_plans}
+					plans_ref={plans_ref}
 					editing_id={editing_id}
 					set_editing_id={set_editing_id}
 					rename_plan={rename_plan}
