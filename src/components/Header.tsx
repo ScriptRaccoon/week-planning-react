@@ -1,9 +1,13 @@
 import styles from "./Header.module.css"
 
-export default function Header() {
+type Props = {
+	children: React.ReactNode
+}
+
+export default function Header({ children }: Props) {
 	return (
 		<header className={styles.header}>
-			<h1 className={styles.heading}>Week Planner</h1>
+			<h1 className={styles.heading}>{children}</h1>
 		</header>
 	)
 }

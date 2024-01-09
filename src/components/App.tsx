@@ -119,7 +119,7 @@ function App() {
 
 	return (
 		<>
-			<Header />
+			<Header>Week Planner</Header>
 			<main>
 				<WeekMenu
 					week_start={week_start}
