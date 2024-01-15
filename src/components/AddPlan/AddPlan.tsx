@@ -7,13 +7,16 @@ type Props = {
 
 export default function AddPlan({ add }: Props) {
 	const [status, setStatus] = useState<string>("")
-	const [name, setName] = useState<string>("")
 
-	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+	function handleSubmit(
+		e: React.FormEvent<HTMLFormElement> & { target: HTMLFormElement }
+	) {
 		e.preventDefault()
+		const formData = new FormData(e.target)
+		const name = formData.get("name") as string
 		if (!name) return
 		add(name)
-		setName("")
+		e.target.reset()
 		setStatus("added")
 		setTimeout(() => setStatus(""), 1000)
 	}
@@ -35,9 +38,8 @@ export default function AddPlan({ add }: Props) {
 					type='text'
 					className={`input ${styles.nameInput}`}
 					id='nameInput'
+					name='name'
 					autoComplete='off'
-					value={name}
-					onChange={(e) => setName(e.target.value)}
 				/>
 				<button className='button big'>Add</button>
 			</form>
