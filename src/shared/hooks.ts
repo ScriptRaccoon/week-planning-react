@@ -5,18 +5,9 @@ export function useLocalStorage<T>(
 	defaultValue: T,
 	update: (value: T) => void = () => {}
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-	let initialValue: T
-
-	try {
-		const hasStoredValue = localStorage.getItem(key) !== null
-		initialValue = hasStoredValue
-			? JSON.parse(localStorage.getItem(key)!)
-			: defaultValue
-	} catch (_) {
-		initialValue = defaultValue
-	}
-
-	const [value, setValue] = useState<T>(initialValue)
+	const [value, setValue] = useState<T>(() =>
+		getStoredValue(key, defaultValue)
+	)
 
 	useEffect(() => {
 		localStorage.setItem(key, JSON.stringify(value))
@@ -24,4 +15,15 @@ export function useLocalStorage<T>(
 	}, [value, key, update])
 
 	return [value, setValue]
+}
+
+function getStoredValue<T>(key: string, defaultValue: T): T {
+	try {
+		const hasStoredValue = localStorage.getItem(key) !== null
+		return hasStoredValue
+			? JSON.parse(localStorage.getItem(key)!)
+			: defaultValue
+	} catch (_) {
+		return defaultValue
+	}
 }
