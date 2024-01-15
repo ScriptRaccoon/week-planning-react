@@ -10,10 +10,10 @@ import {
 } from "@/shared/utils"
 import { useLocalStorage } from "@/shared/hooks"
 
-import Header from "@/components/Header"
-import WeekMenu from "@/components/WeekMenu"
-import AddPlan from "@/components/AddPlan"
-import Plans from "@/components/Plans"
+import Header from "@/components/Header/Header"
+import WeekMenu from "@/components/WeekMenu/WeekMenu"
+import AddPlan from "@/components/AddPlan/AddPlan"
+import Plans from "@/components/Plans/Plans"
 
 function App() {
 	// state

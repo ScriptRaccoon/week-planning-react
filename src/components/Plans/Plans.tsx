@@ -1,5 +1,5 @@
 import type { PlanData, PlanProps } from "@/shared/types"
-import Plan from "@/components/Plan"
+import Plan from "@/components/Plan/Plan"
 
 import styles from "./Plans.module.css"
 
