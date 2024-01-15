@@ -40,11 +40,11 @@
 	opacity: 0.15;
 }
 
-.edit_container > .button_done {
+.editContainer > .buttonDone {
 	background-color: var(--secondary-color) !important;
 }
 
-.edit_container {
+.editContainer {
 	z-index: 10;
 	position: absolute;
 	right: 0;
@@ -58,23 +58,23 @@
 	gap: 0.5rem;
 }
 
-.edit_container_enter {
+.editContainerEnter {
 	opacity: 0;
 	transform: translateX(1.5rem);
 }
 
-.edit_container_enter_active {
+.editContainerEnterActive {
 	opacity: 1;
 	transform: translateX(0);
 	transition: opacity 120ms, transform 120ms;
 }
 
-.edit_container_exit {
+.editContainerExit {
 	opacity: 1;
 	transform: translateX(0);
 }
 
-.edit_container_exit_active {
+.editContainerExitActive {
 	opacity: 0;
 	transform: translateX(1.5rem);
 	transition: opacity 120ms, transform 120ms;

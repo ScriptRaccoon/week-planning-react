@@ -6,36 +6,36 @@ import {
 import styles from "./WeekMenu.module.css"
 
 type Props = {
-	week_start: Date
-	week_end: Date
-	increment_week: () => void
-	decrement_week: () => void
+	weekStart: Date
+	weekEnd: Date
+	incrementWeek: () => void
+	decrementWeek: () => void
 }
 
 export default function WeekMenu({
-	week_start,
-	week_end,
-	increment_week,
-	decrement_week,
+	weekStart,
+	weekEnd,
+	incrementWeek,
+	decrementWeek,
 }: Props) {
 	return (
 		<div className={styles.menu}>
 			<h2 className={styles.title}>
 				<span aria-hidden='true'>
-					{week_start.toLocaleDateString()}
+					{weekStart.toLocaleDateString()}
 					&nbsp;&ndash;&nbsp;
-					{week_end.toLocaleDateString()}
+					{weekEnd.toLocaleDateString()}
 				</span>
 				<span className='sr-only' aria-live='polite'>
-					{week_start.toDateString()}
-					{week_end.toDateString()}
+					{weekStart.toDateString()}
+					{weekEnd.toDateString()}
 				</span>
 			</h2>
 
 			<button
 				className='button big'
 				aria-label='previous week'
-				onClick={decrement_week}
+				onClick={decrementWeek}
 			>
 				<FontAwesomeIcon icon={faChevronLeft} />
 			</button>
@@ -43,7 +43,7 @@ export default function WeekMenu({
 			<button
 				className='button big'
 				aria-label='next week'
-				onClick={increment_week}
+				onClick={incrementWeek}
 			>
 				<FontAwesomeIcon icon={faChevronRight} />
 			</button>

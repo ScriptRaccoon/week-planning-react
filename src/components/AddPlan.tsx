@@ -6,16 +6,16 @@ type Props = {
 }
 
 export default function AddPlan({ add }: Props) {
-	const [status, set_status] = useState<string>("")
-	const [name, set_name] = useState<string>("")
+	const [status, setStatus] = useState<string>("")
+	const [name, setName] = useState<string>("")
 
-	function handle_submit(e: React.FormEvent<HTMLFormElement>) {
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault()
 		if (!name) return
 		add(name)
-		set_name("")
-		set_status("added")
-		setTimeout(() => set_status(""), 1000)
+		setName("")
+		setStatus("added")
+		setTimeout(() => setStatus(""), 1000)
 	}
 
 	return (
@@ -24,20 +24,20 @@ export default function AddPlan({ add }: Props) {
 				{status}
 			</div>
 
-			<form onSubmit={handle_submit} className={styles.form}>
+			<form onSubmit={handleSubmit} className={styles.form}>
 				<label
-					className={`label ${styles.input_label}`}
-					htmlFor='name_input'
+					className={`label ${styles.inputLabel}`}
+					htmlFor='nameInput'
 				>
 					What do you plan this week?
 				</label>
 				<input
 					type='text'
-					className={`input ${styles.name_input}`}
-					id='name_input'
+					className={`input ${styles.nameInput}`}
+					id='nameInput'
 					autoComplete='off'
 					value={name}
-					onChange={(e) => set_name(e.target.value)}
+					onChange={(e) => setName(e.target.value)}
 				/>
 				<button className='button big'>Add</button>
 			</form>

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 
-import { Plan_Data } from "@/shared/types"
+import { PlanData as PlanData } from "@/shared/types"
 import {
-	add_one_week,
-	get_week_end,
-	get_week_start,
+	addOneWeek,
+	getWeekEnd,
+	getWeekStart,
 	key,
-	remove_one_week,
+	removeOneWeek,
 } from "@/shared/utils"
 import { useLocalStorage } from "@/shared/hooks"
 
@@ -19,112 +19,112 @@ function App() {
 	// state
 
 	const now = new Date()
-	const [week_start, set_week_start] = useState<Date>(get_week_start(now))
-	const [editing_id, set_editing_id] = useState<string | null>(null)
-	const [plans, set_plans] = useLocalStorage<Record<string, Plan_Data[]>>(
-		"plans_react",
+	const [weekStart, setWeekStart] = useState<Date>(getWeekStart(now))
+	const [editingID, setEditingID] = useState<string | null>(null)
+	const [plans, setPlans] = useLocalStorage<Record<string, PlanData[]>>(
+		"plansReact",
 		{}
 	)
 
-	const week_end = get_week_end(week_start)
-	const current_plans = plans[key(week_start)] ?? []
+	const weekEnd = getWeekEnd(weekStart)
+	const currentPlans = plans[key(weekStart)] ?? []
 
-	const plans_ref = useRef<HTMLDivElement>(null)
+	const plansRef = useRef<HTMLDivElement>(null)
 
 	// effect hooks
 
 	useEffect(() => {
-		window.addEventListener("keydown", handle_keydown)
-		document.addEventListener("click", handle_click)
+		window.addEventListener("keydown", handleKeyDown)
+		document.addEventListener("click", handleClick)
 
-		function handle_keydown(e: KeyboardEvent) {
-			if (e.key === "Escape") cancel_edit()
+		function handleKeyDown(e: KeyboardEvent) {
+			if (e.key === "Escape") cancelEdit()
 		}
 
-		function handle_click(e: MouseEvent) {
-			const is_outside = !plans_ref.current?.contains(e.target as Node)
-			if (editing_id && is_outside) cancel_edit()
+		function handleClick(e: MouseEvent) {
+			const isOutside = !plansRef.current?.contains(e.target as Node)
+			if (editingID && isOutside) cancelEdit()
 		}
 
 		return () => {
-			window.removeEventListener("keydown", handle_keydown)
-			document.removeEventListener("click", handle_click)
+			window.removeEventListener("keydown", handleKeyDown)
+			document.removeEventListener("click", handleClick)
 		}
-	}, [editing_id])
+	}, [editingID])
 
 	// week navigation
 
-	function increment_week(): void {
-		set_week_start(add_one_week(week_start))
+	function incrementWeek(): void {
+		setWeekStart(addOneWeek(weekStart))
 	}
 
-	function decrement_week(): void {
-		set_week_start(remove_one_week(week_start))
+	function decrementWeek(): void {
+		setWeekStart(removeOneWeek(weekStart))
 	}
 
 	// helper functions
 
-	function cancel_edit(): void {
-		set_editing_id(null)
+	function cancelEdit(): void {
+		setEditingID(null)
 	}
 
-	function update_plans(week_key: string, updated_plans: Plan_Data[]): void {
-		set_plans((plans) => ({ ...plans, [week_key]: updated_plans }))
+	function updatePlans(weekKey: string, updatedPlans: PlanData[]): void {
+		setPlans((plans) => ({ ...plans, [weekKey]: updatedPlans }))
 	}
 
-	function update_plan(
-		week_key: string,
-		transform: (plan: Plan_Data) => Partial<Plan_Data>
+	function updatePlan(
+		weekKey: string,
+		transform: (plan: PlanData) => Partial<PlanData>
 	): void {
-		const updated_plans = (plans[week_key] ?? []).map((plan) =>
-			plan.id === editing_id ? { ...plan, ...transform(plan) } : plan
+		const updatedPlans = (plans[weekKey] ?? []).map((plan) =>
+			plan.id === editingID ? { ...plan, ...transform(plan) } : plan
 		)
-		update_plans(week_key, updated_plans)
+		updatePlans(weekKey, updatedPlans)
 	}
 
-	function add_plan(week_key: string, new_plan: Plan_Data): void {
-		update_plans(week_key, [...(plans[week_key] ?? []), new_plan])
+	function addPlan(weekKey: string, newPlan: PlanData): void {
+		updatePlans(weekKey, [...(plans[weekKey] ?? []), newPlan])
 	}
 
-	function delete_plan(week_key: string): void {
-		const updated_plans = (plans[week_key] ?? []).filter(
-			(plan) => plan.id !== editing_id
+	function deletePlan(weekKey: string): void {
+		const updatedPlans = (plans[weekKey] ?? []).filter(
+			(plan) => plan.id !== editingID
 		)
-		update_plans(week_key, updated_plans)
-		cancel_edit()
+		updatePlans(weekKey, updatedPlans)
+		cancelEdit()
 	}
 
 	// main functions
 
-	function create_plan(name: string) {
+	function createPlan(name: string) {
 		if (!name) return
-		const plan: Plan_Data = {
+		const plan: PlanData = {
 			id: crypto.randomUUID(),
 			name,
 			done: false,
 		}
-		add_plan(key(week_start), plan)
+		addPlan(key(weekStart), plan)
 	}
 
-	function rename_plan(name: string): void {
+	function renamePlan(name: string): void {
 		if (!name) return
-		update_plan(key(week_start), () => ({ name }))
+		updatePlan(key(weekStart), () => ({ name }))
 	}
 
-	function toggle_done(): void {
-		update_plan(key(week_start), (plan) => ({ done: !plan.done }))
-		cancel_edit()
+	function toggleDone(): void {
+		updatePlan(key(weekStart), (plan) => ({ done: !plan.done }))
+		cancelEdit()
 	}
 
 	function move(offset: 1 | -1): void {
-		if (!editing_id) return
-		const plan = current_plans.find((p) => p.id === editing_id)
+		if (!editingID) return
+		const plan = currentPlans.find((p) => p.id === editingID)
 		if (!plan) return
-		delete_plan(key(week_start))
-		const action = offset === 1 ? add_one_week : remove_one_week
-		const new_date = action(week_start)
-		add_plan(key(new_date), plan)
-		cancel_edit()
+		deletePlan(key(weekStart))
+		const action = offset === 1 ? addOneWeek : removeOneWeek
+		const newDate = action(weekStart)
+		addPlan(key(newDate), plan)
+		cancelEdit()
 	}
 
 	return (
@@ -132,22 +132,22 @@ function App() {
 			<Header>Week Planner</Header>
 			<main>
 				<WeekMenu
-					week_start={week_start}
-					week_end={week_end}
-					increment_week={increment_week}
-					decrement_week={decrement_week}
+					weekStart={weekStart}
+					weekEnd={weekEnd}
+					incrementWeek={incrementWeek}
+					decrementWeek={decrementWeek}
 				/>
-				<AddPlan add={create_plan} />
+				<AddPlan add={createPlan} />
 				<Plans
-					current_plans={current_plans}
-					plans_ref={plans_ref}
-					editing_id={editing_id}
-					set_editing_id={set_editing_id}
-					rename_plan={rename_plan}
-					toggle_done={toggle_done}
-					move_to_next_week={() => move(1)}
-					move_to_previous_week={() => move(-1)}
-					delete_plan={() => delete_plan(key(week_start))}
+					currentPlans={currentPlans}
+					plansRef={plansRef}
+					editingID={editingID}
+					setEditingID={setEditingID}
+					renamePlan={renamePlan}
+					toggleDone={toggleDone}
+					moveToNextWeek={() => move(1)}
+					moveToPreviousWeek={() => move(-1)}
+					deletePlan={() => deletePlan(key(weekStart))}
 				/>
 			</main>
 		</>

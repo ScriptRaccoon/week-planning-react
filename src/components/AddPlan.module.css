@@ -9,10 +9,10 @@
 	color: var(--font-color);
 }
 
-.input_label {
+.inputLabel {
 	grid-column: 1 / span 2;
 }
 
-.name_input {
+.nameInput {
 	width: 100%;
 }
