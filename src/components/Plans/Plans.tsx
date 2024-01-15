@@ -9,11 +9,11 @@ type Props = {
 } & PlanProps
 
 export default function Plans(props: Props) {
-	const { currentPlans, plansRef } = props
+	const { currentPlans, plansRef, ...rest } = props
 	return (
 		<div className={styles.plans} ref={plansRef}>
 			{currentPlans.map((plan) => (
-				<Plan key={plan.id} plan={plan} {...props} />
+				<Plan key={plan.id} plan={plan} {...rest} />
 			))}
 		</div>
 	)
