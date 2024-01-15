@@ -155,6 +155,7 @@ function App() {
 						moveToPreviousWeek,
 						deletePlan,
 					}}
+					ref={plansRef}
 				/>
 			</main>
 		</>
