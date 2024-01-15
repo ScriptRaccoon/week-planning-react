@@ -86,11 +86,11 @@ function App() {
 		updatePlans(weekKey, [...(plans[weekKey] ?? []), newPlan])
 	}
 
-	function deletePlan(weekKey: string): void {
-		const updatedPlans = (plans[weekKey] ?? []).filter(
+	function deletePlan(): void {
+		const updatedPlans = (plans[key(weekStart)] ?? []).filter(
 			(plan) => plan.id !== editingID
 		)
-		updatePlans(weekKey, updatedPlans)
+		updatePlans(key(weekStart), updatedPlans)
 		cancelEdit()
 	}
 
@@ -120,11 +120,19 @@ function App() {
 		if (!editingID) return
 		const plan = currentPlans.find((p) => p.id === editingID)
 		if (!plan) return
-		deletePlan(key(weekStart))
+		deletePlan()
 		const action = offset === 1 ? addOneWeek : removeOneWeek
 		const newDate = action(weekStart)
 		addPlan(key(newDate), plan)
 		cancelEdit()
+	}
+
+	function moveToNextWeek(): void {
+		move(1)
+	}
+
+	function moveToPreviousWeek(): void {
+		move(-1)
 	}
 
 	return (
@@ -132,22 +140,21 @@ function App() {
 			<Header>Week Planner</Header>
 			<main>
 				<WeekMenu
-					weekStart={weekStart}
-					weekEnd={weekEnd}
-					incrementWeek={incrementWeek}
-					decrementWeek={decrementWeek}
+					{...{ weekStart, weekEnd, incrementWeek, decrementWeek }}
 				/>
 				<AddPlan add={createPlan} />
 				<Plans
-					currentPlans={currentPlans}
-					plansRef={plansRef}
-					editingID={editingID}
-					setEditingID={setEditingID}
-					renamePlan={renamePlan}
-					toggleDone={toggleDone}
-					moveToNextWeek={() => move(1)}
-					moveToPreviousWeek={() => move(-1)}
-					deletePlan={() => deletePlan(key(weekStart))}
+					{...{
+						currentPlans,
+						plansRef,
+						editingID,
+						setEditingID,
+						renamePlan,
+						toggleDone,
+						moveToNextWeek,
+						moveToPreviousWeek,
+						deletePlan,
+					}}
 				/>
 			</main>
 		</>
