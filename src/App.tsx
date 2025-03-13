@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
 import { PlanData } from "@/shared/types"
 import { addOneWeek, key, subtractOneWeek } from "@/shared/utils"
-import { usePlans, useWeek } from "@/shared/hooks"
+import { useEditingID, usePlans, useWeek } from "@/shared/hooks"
 
 import Header from "@/components/Header/Header"
 import WeekMenu from "@/components/WeekMenu/WeekMenu"
@@ -14,38 +14,13 @@ function App() {
 
 	const [weekStart, weekEnd, incrementWeek, decrementWeek] = useWeek()
 	const [plans, updatePlans] = usePlans()
-	const [editingID, setEditingID] = useState<string | null>(null)
+	const [editingID, setEditingID, cancelEditing] = useEditingID()
 
 	const currentPlans = plans[key(weekStart)] ?? []
 
 	const plansRef = useRef<HTMLDivElement>(null)
 
-	// effect hooks
-
-	useEffect(() => {
-		window.addEventListener("keydown", handleKeyDown)
-		document.addEventListener("click", handleClick)
-
-		function handleKeyDown(e: KeyboardEvent) {
-			if (e.key === "Escape") cancelEditing()
-		}
-
-		function handleClick(e: MouseEvent) {
-			const isOutside = !plansRef.current?.contains(e.target as Node)
-			if (editingID && isOutside) cancelEditing()
-		}
-
-		return () => {
-			window.removeEventListener("keydown", handleKeyDown)
-			document.removeEventListener("click", handleClick)
-		}
-	}, [editingID])
-
 	// helper functions
-
-	function cancelEditing(): void {
-		setEditingID(null)
-	}
 
 	function updatePlan(
 		weekKey: string,
@@ -112,6 +87,27 @@ function App() {
 	function movePlanToPreviousWeek(): void {
 		movePlan(-1)
 	}
+
+	// effect hooks
+
+	useEffect(() => {
+		window.addEventListener("keydown", handleKeyDown)
+		document.addEventListener("click", handleClick)
+
+		function handleKeyDown(e: KeyboardEvent) {
+			if (e.key === "Escape") cancelEditing()
+		}
+
+		function handleClick(e: MouseEvent) {
+			const isOutside = !plansRef.current?.contains(e.target as Node)
+			if (editingID && isOutside) cancelEditing()
+		}
+
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown)
+			document.removeEventListener("click", handleClick)
+		}
+	}, [editingID, cancelEditing])
 
 	return (
 		<>

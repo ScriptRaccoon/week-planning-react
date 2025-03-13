@@ -56,3 +56,13 @@ export function useWeek() {
 
 	return [weekStart, weekEnd, incrementWeek, decrementWeek] as const
 }
+
+export function useEditingID() {
+	const [editingID, setEditingID] = useState<string | null>(null)
+
+	const cancelEditing = () => {
+		setEditingID(null)
+	}
+
+	return [editingID, setEditingID, cancelEditing] as const
+}
