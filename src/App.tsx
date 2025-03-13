@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-import { PlanData as PlanData } from "@/shared/types"
+import { PlanData } from "@/shared/types"
 import {
 	addOneWeek,
 	getWeekEnd,
@@ -38,12 +38,12 @@ function App() {
 		document.addEventListener("click", handleClick)
 
 		function handleKeyDown(e: KeyboardEvent) {
-			if (e.key === "Escape") cancelEdit()
+			if (e.key === "Escape") cancelEditing()
 		}
 
 		function handleClick(e: MouseEvent) {
 			const isOutside = !plansRef.current?.contains(e.target as Node)
-			if (editingID && isOutside) cancelEdit()
+			if (editingID && isOutside) cancelEditing()
 		}
 
 		return () => {
@@ -64,7 +64,7 @@ function App() {
 
 	// helper functions
 
-	function cancelEdit(): void {
+	function cancelEditing(): void {
 		setEditingID(null)
 	}
 
@@ -91,14 +91,14 @@ function App() {
 			(plan) => plan.id !== editingID
 		)
 		updatePlans(key(weekStart), updatedPlans)
-		cancelEdit()
+		cancelEditing()
 	}
 
 	// main functions
 
 	function addPlan(name: string) {
 		if (!name) return
-		const plan: PlanData = {
+		const plan = {
 			id: crypto.randomUUID(),
 			name,
 			done: false,
@@ -113,18 +113,21 @@ function App() {
 
 	function toggleDone(): void {
 		updatePlan(key(weekStart), (plan) => ({ done: !plan.done }))
-		cancelEdit()
+		cancelEditing()
 	}
 
-	function move(offset: 1 | -1): void {
+	function move(weekOffset: 1 | -1): void {
 		if (!editingID) return
 		const plan = currentPlans.find((p) => p.id === editingID)
 		if (!plan) return
+
 		deletePlan()
-		const action = offset === 1 ? addOneWeek : subtractOneWeek
-		const newDate = action(weekStart)
+
+		const newDate =
+			weekOffset === 1 ? addOneWeek(weekStart) : subtractOneWeek(weekStart)
+
 		createPlan(key(newDate), plan)
-		cancelEdit()
+		cancelEditing()
 	}
 
 	function moveToNextWeek(): void {
