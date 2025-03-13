@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
+import { PlanData } from "./types"
+import { addOneWeek, getWeekEnd, getWeekStart, subtractOneWeek } from "./utils"
 
 /**
  * Creates a custom hook that stores a value in local storage.
  */
-export function useLocalStorage<T>(
+function useLocalStorage<T>(
 	key: string,
 	defaultValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
@@ -23,4 +25,34 @@ function getStoredValue<T>(key: string, defaultValue: T): T {
 	} catch (_) {
 		return defaultValue
 	}
+}
+
+export function usePlans() {
+	const [plans, setPlans] = useLocalStorage<Record<string, PlanData[]>>(
+		"plansReact",
+		{}
+	)
+
+	function updatePlans(weekKey: string, updatedPlans: PlanData[]): void {
+		setPlans((plans) => ({ ...plans, [weekKey]: updatedPlans }))
+	}
+
+	return [plans, updatePlans] as const
+}
+
+export function useWeek() {
+	const now = new Date()
+	const [weekStart, setWeekStart] = useState<Date>(getWeekStart(now))
+
+	const incrementWeek = () => {
+		setWeekStart(addOneWeek(weekStart))
+	}
+
+	const decrementWeek = () => {
+		setWeekStart(subtractOneWeek(weekStart))
+	}
+
+	const weekEnd = getWeekEnd(weekStart)
+
+	return [weekStart, weekEnd, incrementWeek, decrementWeek] as const
 }

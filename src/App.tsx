@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 
 import { PlanData } from "@/shared/types"
-import {
-	addOneWeek,
-	getWeekEnd,
-	getWeekStart,
-	key,
-	subtractOneWeek,
-} from "@/shared/utils"
-import { useLocalStorage } from "@/shared/hooks"
+import { addOneWeek, key, subtractOneWeek } from "@/shared/utils"
+import { usePlans, useWeek } from "@/shared/hooks"
 
 import Header from "@/components/Header/Header"
 import WeekMenu from "@/components/WeekMenu/WeekMenu"
@@ -18,15 +12,10 @@ import Plans from "@/components/Plans/Plans"
 function App() {
 	// state
 
-	const now = new Date()
-	const [weekStart, setWeekStart] = useState<Date>(getWeekStart(now))
+	const [weekStart, weekEnd, incrementWeek, decrementWeek] = useWeek()
+	const [plans, updatePlans] = usePlans()
 	const [editingID, setEditingID] = useState<string | null>(null)
-	const [plans, setPlans] = useLocalStorage<Record<string, PlanData[]>>(
-		"plansReact",
-		{}
-	)
 
-	const weekEnd = getWeekEnd(weekStart)
 	const currentPlans = plans[key(weekStart)] ?? []
 
 	const plansRef = useRef<HTMLDivElement>(null)
@@ -52,24 +41,10 @@ function App() {
 		}
 	}, [editingID])
 
-	// week navigation
-
-	function incrementWeek(): void {
-		setWeekStart(addOneWeek(weekStart))
-	}
-
-	function decrementWeek(): void {
-		setWeekStart(subtractOneWeek(weekStart))
-	}
-
 	// helper functions
 
 	function cancelEditing(): void {
 		setEditingID(null)
-	}
-
-	function updatePlans(weekKey: string, updatedPlans: PlanData[]): void {
-		setPlans((plans) => ({ ...plans, [weekKey]: updatedPlans }))
 	}
 
 	function updatePlan(
