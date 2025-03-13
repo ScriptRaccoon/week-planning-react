@@ -25,8 +25,8 @@ export default function Plan(props: Props) {
 		renamePlan,
 		setEditingID,
 		toggleDone,
-		moveToNextWeek,
-		moveToPreviousWeek,
+		movePlanToNextWeek,
+		movePlanToPreviousWeek,
 		deletePlan,
 	} = props
 
@@ -35,11 +35,7 @@ export default function Plan(props: Props) {
 	const showEditContainer = editingID === plan.id
 
 	function toggleEdit() {
-		if (showEditContainer) {
-			setEditingID(null)
-		} else {
-			setEditingID(plan.id)
-		}
+		setEditingID(showEditContainer ? null : plan.id)
 	}
 
 	return (
@@ -100,15 +96,13 @@ export default function Plan(props: Props) {
 						})}
 						onClick={toggleDone}
 					>
-						<FontAwesomeIcon
-							icon={plan.done ? faCircleCheck : faCheck}
-						/>
+						<FontAwesomeIcon icon={plan.done ? faCircleCheck : faCheck} />
 					</button>
 
 					<button
 						aria-label='move to next week'
 						className='button'
-						onClick={moveToNextWeek}
+						onClick={movePlanToNextWeek}
 					>
 						<FontAwesomeIcon icon={faChevronRight} />
 					</button>
@@ -116,7 +110,7 @@ export default function Plan(props: Props) {
 					<button
 						aria-label='move to previous week'
 						className='button'
-						onClick={moveToPreviousWeek}
+						onClick={movePlanToPreviousWeek}
 					>
 						<FontAwesomeIcon icon={faChevronLeft} />
 					</button>

@@ -116,7 +116,7 @@ function App() {
 		cancelEditing()
 	}
 
-	function move(weekOffset: 1 | -1): void {
+	function movePlan(weekOffset: 1 | -1): void {
 		if (!editingID) return
 		const plan = currentPlans.find((p) => p.id === editingID)
 		if (!plan) return
@@ -130,12 +130,12 @@ function App() {
 		cancelEditing()
 	}
 
-	function moveToNextWeek(): void {
-		move(1)
+	function movePlanToNextWeek(): void {
+		movePlan(1)
 	}
 
-	function moveToPreviousWeek(): void {
-		move(-1)
+	function movePlanToPreviousWeek(): void {
+		movePlan(-1)
 	}
 
 	return (
@@ -152,8 +152,8 @@ function App() {
 						setEditingID,
 						renamePlan,
 						toggleDone,
-						moveToNextWeek,
-						moveToPreviousWeek,
+						movePlanToNextWeek,
+						movePlanToPreviousWeek,
 						deletePlan,
 					}}
 					ref={plansRef}

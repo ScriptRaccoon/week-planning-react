@@ -9,7 +9,7 @@ export type PlanProps = {
 	renamePlan: (name: string) => void
 	setEditingID: (id: string | null) => void
 	toggleDone: () => void
-	moveToNextWeek: () => void
-	moveToPreviousWeek: () => void
+	movePlanToNextWeek: () => void
+	movePlanToPreviousWeek: () => void
 	deletePlan: () => void
 }
