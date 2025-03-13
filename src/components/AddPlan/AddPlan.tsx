@@ -14,7 +14,6 @@ export default function AddPlan({ addPlan }: Props) {
 		e.preventDefault()
 		const formData = new FormData(e.target)
 		const name = formData.get("name") as string
-		if (!name) return
 		addPlan(name)
 		e.target.reset()
 		setStatus("added")

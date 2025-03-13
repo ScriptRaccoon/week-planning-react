@@ -77,7 +77,7 @@ export default function Plan(props: Props) {
 					/>
 				) : (
 					<div className={styles.name} id={plan.id}>
-						{plan.name}
+						{plan.name ? plan.name : <>&nbsp;</>}
 					</div>
 				)}
 			</div>

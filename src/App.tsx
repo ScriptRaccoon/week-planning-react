@@ -47,7 +47,6 @@ function App() {
 	// main functions
 
 	function addPlan(name: string) {
-		if (!name) return
 		const plan = {
 			id: crypto.randomUUID(),
 			name,
@@ -57,7 +56,6 @@ function App() {
 	}
 
 	function renamePlan(name: string): void {
-		if (!name) return
 		updatePlan(key(weekStart), () => ({ name }))
 	}
 
