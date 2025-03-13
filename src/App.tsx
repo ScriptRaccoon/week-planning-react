@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 
 import { PlanData as PlanData } from "@/shared/types"
-import { addOneWeek, getWeekEnd, getWeekStart, key, removeOneWeek } from "@/shared/utils"
+import {
+	addOneWeek,
+	getWeekEnd,
+	getWeekStart,
+	key,
+	subtractOneWeek,
+} from "@/shared/utils"
 import { useLocalStorage } from "@/shared/hooks"
 
 import Header from "@/components/Header/Header"
@@ -53,7 +59,7 @@ function App() {
 	}
 
 	function decrementWeek(): void {
-		setWeekStart(removeOneWeek(weekStart))
+		setWeekStart(subtractOneWeek(weekStart))
 	}
 
 	// helper functions
@@ -115,7 +121,7 @@ function App() {
 		const plan = currentPlans.find((p) => p.id === editingID)
 		if (!plan) return
 		deletePlan()
-		const action = offset === 1 ? addOneWeek : removeOneWeek
+		const action = offset === 1 ? addOneWeek : subtractOneWeek
 		const newDate = action(weekStart)
 		createPlan(key(newDate), plan)
 		cancelEdit()

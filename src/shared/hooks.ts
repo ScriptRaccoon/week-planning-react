@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react"
 
+/**
+ * Creates a custom hook that stores a value in local storage.
+ */
 export function useLocalStorage<T>(
 	key: string,
 	defaultValue: T
