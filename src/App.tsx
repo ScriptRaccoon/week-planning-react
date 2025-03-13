@@ -1,13 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 
 import { PlanData as PlanData } from "@/shared/types"
-import {
-	addOneWeek,
-	getWeekEnd,
-	getWeekStart,
-	key,
-	removeOneWeek,
-} from "@/shared/utils"
+import { addOneWeek, getWeekEnd, getWeekStart, key, removeOneWeek } from "@/shared/utils"
 import { useLocalStorage } from "@/shared/hooks"
 
 import Header from "@/components/Header/Header"
@@ -82,7 +76,7 @@ function App() {
 		updatePlans(weekKey, updatedPlans)
 	}
 
-	function addPlan(weekKey: string, newPlan: PlanData): void {
+	function createPlan(weekKey: string, newPlan: PlanData): void {
 		updatePlans(weekKey, [...(plans[weekKey] ?? []), newPlan])
 	}
 
@@ -96,14 +90,14 @@ function App() {
 
 	// main functions
 
-	function createPlan(name: string) {
+	function addPlan(name: string) {
 		if (!name) return
 		const plan: PlanData = {
 			id: crypto.randomUUID(),
 			name,
 			done: false,
 		}
-		addPlan(key(weekStart), plan)
+		createPlan(key(weekStart), plan)
 	}
 
 	function renamePlan(name: string): void {
@@ -123,7 +117,7 @@ function App() {
 		deletePlan()
 		const action = offset === 1 ? addOneWeek : removeOneWeek
 		const newDate = action(weekStart)
-		addPlan(key(newDate), plan)
+		createPlan(key(newDate), plan)
 		cancelEdit()
 	}
 
@@ -139,10 +133,8 @@ function App() {
 		<>
 			<Header>Week Planner</Header>
 			<main>
-				<WeekMenu
-					{...{ weekStart, weekEnd, incrementWeek, decrementWeek }}
-				/>
-				<AddPlan add={createPlan} />
+				<WeekMenu {...{ weekStart, weekEnd, incrementWeek, decrementWeek }} />
+				<AddPlan addPlan={addPlan} />
 				<Plans
 					{...{
 						currentPlans,
