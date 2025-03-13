@@ -1,13 +1,20 @@
 import { forwardRef } from "react"
 
-import type { PlanData, PlanProps } from "@/shared/types"
+import type { PlanData } from "@/shared/types"
 import Plan from "@/components/Plan/Plan"
 
 import styles from "./Plans.module.css"
 
 type Props = {
 	currentPlans: PlanData[]
-} & PlanProps
+	editingID: string | null
+	setEditingID: (id: string | null) => void
+	renamePlan: (name: string) => void
+	toggleDone: () => void
+	movePlanToNextWeek: () => void
+	movePlanToPreviousWeek: () => void
+	deletePlan: () => void
+}
 
 const Plans = forwardRef<HTMLDivElement, Props>((props, ref) => {
 	const { currentPlans, ...rest } = props

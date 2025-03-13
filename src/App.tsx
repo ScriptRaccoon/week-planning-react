@@ -147,7 +147,6 @@ function App() {
 				<Plans
 					{...{
 						currentPlans,
-						plansRef,
 						editingID,
 						setEditingID,
 						renamePlan,

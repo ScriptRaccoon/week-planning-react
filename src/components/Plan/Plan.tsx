@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { PlanData, PlanProps } from "@/shared/types"
+import { PlanData } from "@/shared/types"
 import { CSSTransition } from "react-transition-group"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
@@ -16,14 +16,21 @@ import styles from "./Plan.module.css"
 
 type Props = {
 	plan: PlanData
-} & PlanProps
+	editingID: string | null
+	setEditingID: (id: string | null) => void
+	renamePlan: (name: string) => void
+	toggleDone: () => void
+	movePlanToNextWeek: () => void
+	movePlanToPreviousWeek: () => void
+	deletePlan: () => void
+}
 
 export default function Plan(props: Props) {
 	const {
 		plan,
 		editingID,
-		renamePlan,
 		setEditingID,
+		renamePlan,
 		toggleDone,
 		movePlanToNextWeek,
 		movePlanToPreviousWeek,
