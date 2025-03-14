@@ -23,11 +23,12 @@ function App() {
 	// helper functions
 
 	function updatePlan(
+		id: string,
 		weekKey: string,
 		transform: (plan: PlanData) => Partial<PlanData>
 	): void {
 		const updatedPlans = (plans[weekKey] ?? []).map((plan) =>
-			plan.id === editingID ? { ...plan, ...transform(plan) } : plan
+			plan.id === id ? { ...plan, ...transform(plan) } : plan
 		)
 		updatePlans(weekKey, updatedPlans)
 	}
@@ -36,9 +37,9 @@ function App() {
 		updatePlans(weekKey, [...(plans[weekKey] ?? []), newPlan])
 	}
 
-	function deletePlan(): void {
+	function deletePlan(id: string): void {
 		const updatedPlans = (plans[key(weekStart)] ?? []).filter(
-			(plan) => plan.id !== editingID
+			(plan) => plan.id !== id
 		)
 		updatePlans(key(weekStart), updatedPlans)
 		cancelEditing()
@@ -55,21 +56,20 @@ function App() {
 		createPlan(key(weekStart), plan)
 	}
 
-	function renamePlan(name: string): void {
-		updatePlan(key(weekStart), () => ({ name }))
+	function renamePlan(id: string, name: string): void {
+		updatePlan(id, key(weekStart), () => ({ name }))
 	}
 
-	function toggleDone(): void {
-		updatePlan(key(weekStart), (plan) => ({ done: !plan.done }))
+	function toggleDone(id: string): void {
+		updatePlan(id, key(weekStart), (plan) => ({ done: !plan.done }))
 		cancelEditing()
 	}
 
-	function movePlan(weekOffset: 1 | -1): void {
-		if (!editingID) return
-		const plan = currentPlans.find((p) => p.id === editingID)
+	function movePlan(id: string, weekOffset: 1 | -1): void {
+		const plan = currentPlans.find((p) => p.id === id)
 		if (!plan) return
 
-		deletePlan()
+		deletePlan(id)
 
 		const newDate =
 			weekOffset === 1 ? addOneWeek(weekStart) : subtractOneWeek(weekStart)
@@ -78,12 +78,12 @@ function App() {
 		cancelEditing()
 	}
 
-	function movePlanToNextWeek(): void {
-		movePlan(1)
+	function movePlanToNextWeek(id: string): void {
+		movePlan(id, 1)
 	}
 
-	function movePlanToPreviousWeek(): void {
-		movePlan(-1)
+	function movePlanToPreviousWeek(id: string): void {
+		movePlan(id, -1)
 	}
 
 	// effect hooks
@@ -111,19 +111,22 @@ function App() {
 		<>
 			<Header>Week Planner</Header>
 			<main>
-				<WeekMenu {...{ weekStart, weekEnd, incrementWeek, decrementWeek }} />
+				<WeekMenu
+					weekStart={weekStart}
+					weekEnd={weekEnd}
+					incrementWeek={incrementWeek}
+					decrementWeek={decrementWeek}
+				/>
 				<AddPlan addPlan={addPlan} />
 				<Plans
-					{...{
-						currentPlans,
-						editingID,
-						setEditingID,
-						renamePlan,
-						toggleDone,
-						movePlanToNextWeek,
-						movePlanToPreviousWeek,
-						deletePlan,
-					}}
+					currentPlans={currentPlans}
+					editingID={editingID}
+					setEditingID={setEditingID}
+					renamePlan={renamePlan}
+					toggleDone={toggleDone}
+					movePlanToNextWeek={movePlanToNextWeek}
+					movePlanToPreviousWeek={movePlanToPreviousWeek}
+					deletePlan={deletePlan}
 					ref={plansRef}
 				/>
 			</main>

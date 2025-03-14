@@ -9,19 +9,39 @@ type Props = {
 	currentPlans: PlanData[]
 	editingID: string | null
 	setEditingID: (id: string | null) => void
-	renamePlan: (name: string) => void
-	toggleDone: () => void
-	movePlanToNextWeek: () => void
-	movePlanToPreviousWeek: () => void
-	deletePlan: () => void
+	renamePlan: (id: string, name: string) => void
+	toggleDone: (id: string) => void
+	movePlanToNextWeek: (id: string) => void
+	movePlanToPreviousWeek: (id: string) => void
+	deletePlan: (id: string) => void
 }
 
 const Plans = forwardRef<HTMLDivElement, Props>((props, ref) => {
-	const { currentPlans, ...rest } = props
+	const {
+		currentPlans,
+		editingID,
+		setEditingID,
+		renamePlan,
+		toggleDone,
+		movePlanToNextWeek,
+		movePlanToPreviousWeek,
+		deletePlan,
+	} = props
+
 	return (
 		<div className={styles.plans} ref={ref}>
 			{currentPlans.map((plan) => (
-				<Plan key={plan.id} plan={plan} {...rest} />
+				<Plan
+					key={plan.id}
+					plan={plan}
+					editingID={editingID}
+					setEditingID={setEditingID}
+					renamePlan={(name: string) => renamePlan(plan.id, name)}
+					toggleDone={() => toggleDone(plan.id)}
+					movePlanToNextWeek={() => movePlanToNextWeek(plan.id)}
+					movePlanToPreviousWeek={() => movePlanToPreviousWeek(plan.id)}
+					deletePlan={() => deletePlan(plan.id)}
+				/>
 			))}
 		</div>
 	)
