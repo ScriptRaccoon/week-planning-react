@@ -33,7 +33,7 @@ function App() {
 		cancelEditing()
 	}
 
-	function addPlan(name: string) {
+	function addPlan(name: string): void {
 		const plan = {
 			id: crypto.randomUUID(),
 			name,
