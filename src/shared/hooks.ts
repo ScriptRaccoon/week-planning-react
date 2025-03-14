@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { PlanData } from "./types"
+import { PlanData, PlansData } from "./types"
 import { addOneWeek, getWeekEnd, getWeekStart, subtractOneWeek } from "./utils"
 
 /**
@@ -28,10 +28,7 @@ function getStoredValue<T>(key: string, defaultValue: T): T {
 }
 
 export function usePlans() {
-	const [plans, setPlans] = useLocalStorage<Record<string, PlanData[]>>(
-		"plansReact",
-		{}
-	)
+	const [plans, setPlans] = useLocalStorage<PlansData>("plansReact", {})
 
 	function updatePlans(weekKey: string, updatedPlans: PlanData[]): void {
 		const isEmpty = updatedPlans.length === 0
