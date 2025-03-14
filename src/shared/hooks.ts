@@ -20,8 +20,8 @@ function useLocalStorage<T>(
 
 function getStoredValue<T>(key: string, defaultValue: T): T {
 	try {
-		const hasStoredValue = localStorage.getItem(key) !== null
-		return hasStoredValue ? JSON.parse(localStorage.getItem(key)!) : defaultValue
+		const item = localStorage.getItem(key)
+		return item ? JSON.parse(item) : defaultValue
 	} catch (_) {
 		return defaultValue
 	}
