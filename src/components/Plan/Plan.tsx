@@ -107,7 +107,7 @@ export default function Plan(props: Props) {
 					</button>
 
 					<button
-						aria-label='move to next week'
+						aria-label='move plan to next week'
 						className='button'
 						onClick={movePlanToNextWeek}
 					>
@@ -115,7 +115,7 @@ export default function Plan(props: Props) {
 					</button>
 
 					<button
-						aria-label='move to previous week'
+						aria-label='move plan to previous week'
 						className='button'
 						onClick={movePlanToPreviousWeek}
 					>
