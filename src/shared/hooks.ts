@@ -37,7 +37,18 @@ export function usePlans() {
 		setPlans((plans) => ({ ...plans, [weekKey]: updatedPlans }))
 	}
 
-	return [plans, updatePlans] as const
+	function updatePlan(
+		id: string,
+		weekKey: string,
+		transform: (plan: PlanData) => Partial<PlanData>
+	): void {
+		const updatedPlans = (plans[weekKey] ?? []).map((plan) =>
+			plan.id === id ? { ...plan, ...transform(plan) } : plan
+		)
+		updatePlans(weekKey, updatedPlans)
+	}
+
+	return [plans, updatePlans, updatePlan] as const
 }
 
 export function useWeek() {

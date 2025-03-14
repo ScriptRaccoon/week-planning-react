@@ -13,39 +13,25 @@ function App() {
 	// state
 
 	const [weekStart, weekEnd, incrementWeek, decrementWeek] = useWeek()
-	const [plans, updatePlans] = usePlans()
+	const [plans, updatePlans, updatePlan] = usePlans()
 	const [editingID, setEditingID, cancelEditing] = useEditingID()
 
 	const currentPlans = plans[key(weekStart)] ?? []
 
 	const plansRef = useRef<HTMLDivElement>(null)
 
-	// helper functions
+	// main functions
 
-	function updatePlan(
-		id: string,
-		weekKey: string,
-		transform: (plan: PlanData) => Partial<PlanData>
-	): void {
-		const updatedPlans = (plans[weekKey] ?? []).map((plan) =>
-			plan.id === id ? { ...plan, ...transform(plan) } : plan
-		)
+	function createPlan(weekKey: string, newPlan: PlanData): void {
+		const updatedPlans = [...(plans[weekKey] ?? []), newPlan]
 		updatePlans(weekKey, updatedPlans)
 	}
 
-	function createPlan(weekKey: string, newPlan: PlanData): void {
-		updatePlans(weekKey, [...(plans[weekKey] ?? []), newPlan])
-	}
-
 	function deletePlan(id: string): void {
-		const updatedPlans = (plans[key(weekStart)] ?? []).filter(
-			(plan) => plan.id !== id
-		)
+		const updatedPlans = plans[key(weekStart)].filter((plan) => plan.id !== id)
 		updatePlans(key(weekStart), updatedPlans)
 		cancelEditing()
 	}
-
-	// main functions
 
 	function addPlan(name: string) {
 		const plan = {
