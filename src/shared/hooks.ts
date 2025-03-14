@@ -34,7 +34,14 @@ export function usePlans() {
 	)
 
 	function updatePlans(weekKey: string, updatedPlans: PlanData[]): void {
-		setPlans((plans) => ({ ...plans, [weekKey]: updatedPlans }))
+		const isEmpty = updatedPlans.length === 0
+		if (isEmpty) {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { [weekKey]: _, ...rest } = plans
+			setPlans(rest)
+		} else {
+			setPlans((plans) => ({ ...plans, [weekKey]: updatedPlans }))
+		}
 	}
 
 	function updatePlan(

@@ -28,7 +28,7 @@ function App() {
 	}
 
 	function deletePlan(id: string): void {
-		const updatedPlans = plans[key(weekStart)].filter((plan) => plan.id !== id)
+		const updatedPlans = currentPlans.filter((plan) => plan.id !== id)
 		updatePlans(key(weekStart), updatedPlans)
 		cancelEditing()
 	}
