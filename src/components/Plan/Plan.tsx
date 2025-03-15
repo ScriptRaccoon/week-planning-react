@@ -56,10 +56,11 @@ export default function Plan(props: Props) {
 				})}
 			>
 				<button
-					aria-label='toggle edit'
 					className='button'
 					onClick={toggleEdit}
+					aria-label='toggle edit'
 					aria-describedby={plan.id}
+					aria-pressed={showEditContainer}
 				>
 					<FontAwesomeIcon icon={faBars} />
 				</button>
@@ -96,12 +97,13 @@ export default function Plan(props: Props) {
 			>
 				<div className={styles.editContainer} ref={editContainerRef}>
 					<button
-						aria-label='toggle done'
 						className={classnames({
 							button: true,
 							[styles.buttonDone]: plan.done,
 						})}
 						onClick={toggleDone}
+						aria-label='toggle done'
+						aria-pressed={plan.done}
 					>
 						<FontAwesomeIcon icon={plan.done ? faCircleCheck : faCheck} />
 					</button>
