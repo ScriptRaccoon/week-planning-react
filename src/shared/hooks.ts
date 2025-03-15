@@ -57,6 +57,8 @@ export function usePlans() {
 
 export function useWeek() {
 	const now = new Date()
+	now.setUTCHours(0, 0, 0, 0)
+
 	const [weekStart, setWeekStart] = useState<Date>(getWeekStart(now))
 
 	const incrementWeek = () => {
